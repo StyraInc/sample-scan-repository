@@ -1,0 +1,19 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "cluster_name": "dev-dungeon.us-east-1.eksctl.io",
+    "env_name": "dev-dungeon.us-east-1.eksctl.io",
+    "environment_name": "nucleus",
+    "namespace_name": "nucleus",
+    "region": "us-east-1"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "labels": {
+      "cicd.hooli.com/environment": "nucleus",
+      "cicd.hooli.com/k8s-namespace": "nucleus"
+    },
+    "name": "deployment-config",
+    "namespace": "nucleus"
+  }
+}
