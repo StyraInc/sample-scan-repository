@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    cicd.hooli.com/environment: nucleus
+    cicd.hooli.com/k8s-namespace: nucleus
+  name: frontend
+  namespace: nucleus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+        cicd.hooli.com/environment: nucleus
+        cicd.hooli.com/k8s-namespace: nucleus
+    spec:
+      containers:
+      - args:
+        - --cluster
+        - $(CLUSTER_NAME)
+        env:
+        - name: CLUSTER_NAME
+          value: dev-dungeon.us-east-1.eksctl.io
+        - name: ENVIRONMENT_NAME
+          value: nucleus
+        - name: SERVICE_NAME
+          value: frontend
+        image: hooli.com/hooli/frontend:1.0.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /v1/system/alive
+            port: 8080
+            scheme: HTTP
+        name: frontend
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /v1/system/ready
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 32Mi
+        volumeMounts:
+        - mountPath: /settings
+          name: settings-volume
+        - mountPath: /features
+          name: features-volume
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: settings
+        name: settings-volume
+      - configMap:
+          defaultMode: 420
+          name: features
+        name: features-volume

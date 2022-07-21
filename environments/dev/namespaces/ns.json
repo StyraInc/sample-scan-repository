@@ -1,0 +1,17 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "annotations": {
+      "cicd.hooli.com/git_ref": "refs/heads/dev-env"
+    },
+    "labels": {
+      "cicd.hooli.com/environment": "nucleus",
+      "cicd.hooli.com/k8s-namespace": "nucleus",
+      "cicd.hooli.com/target": "dev"
+    },
+    "name": "nucleus",
+    "namespace": "nucleus"
+  },
+  "spec": {}
+}
